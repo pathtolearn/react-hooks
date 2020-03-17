@@ -1,26 +1,74 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useReducer } from "react";
 
-function App() {
+import PostList from "./post/PostList";
+import CreatePost from "./post/CreatePost";
+import UserBar from "./user/UserBar";
+
+const defaultPosts = [
+  {
+    title: "React Hooks",
+    content: "The greatest thing since sliced bread!",
+    author: "Daniel Bugl"
+  },
+  {
+    title: "Using React Fragments",
+    content: "Keeping the DOM tree clean!",
+    author: "Daniel Bugl"
+  }
+];
+
+function userReducer(state, action) {
+  switch (action.type) {
+    case "LOGIN":
+    case "REGISTER":
+      return action.username;
+    case "LOGOUT":
+      return "";
+    default:
+      throw new Error();
+  }
+}
+
+function postsReducer(state, action) {
+  switch (action.type) {
+    case "CREATE_POST":
+      const newPost = {
+        title: action.title,
+        content: action.content,
+        author: action.author
+      };
+      return [newPost, ...state];
+    default:
+      throw new Error();
+  }
+}
+
+function appReducer(state, action) {
+  return {
+    user: userReducer(state.user, action),
+    posts: postsReducer(state.posts, action)
+  };
+}
+
+export default function App() {
+  // const [user, dispatchUser] = useReducer(userReducer, "");
+  // const [posts, dispatchPosts] = useReducer(postsReducer, defaultPosts);
+
+  const [state, dispatch] = useReducer(appReducer, {
+    userr: "",
+    posts: defaultPosts
+  });
+
+  const { user, posts } = state;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: 8 }}>
+      <UserBar user={user} dispatch={dispatch} />
+      <br />
+      {user && <CreatePost user={user} posts={posts} dispatch={dispatch} />}
+      <br />
+      <hr />
+      <PostList posts={posts} />
     </div>
   );
 }
-
-export default App;
