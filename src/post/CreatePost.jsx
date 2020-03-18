@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export default function CreatePost({ user, posts, dispatch }) {
   const [title, setTitle] = useState("");
-  const [conent, setContent] = useState("");
+  const [content, setContent] = useState("");
 
   function handleTitleChange(evt) {
     setTitle(evt.target.value);
@@ -36,7 +36,7 @@ export default function CreatePost({ user, posts, dispatch }) {
           id="create-title"
         />
       </div>
-      <textarea value={conent} onChange={handleContentChange} />
+      <textarea value={content} onChange={handleContentChange} />
       <input type="submit" value="Create" />
     </form>
   );

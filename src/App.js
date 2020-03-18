@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 
 import PostList from "./post/PostList";
 import CreatePost from "./post/CreatePost";
@@ -38,8 +38,6 @@ function postsReducer(state, action) {
         author: action.author
       };
       return [newPost, ...state];
-    default:
-      throw new Error();
   }
 }
 
@@ -55,11 +53,21 @@ export default function App() {
   // const [posts, dispatchPosts] = useReducer(postsReducer, defaultPosts);
 
   const [state, dispatch] = useReducer(appReducer, {
-    userr: "",
+    user: "",
     posts: defaultPosts
   });
 
   const { user, posts } = state;
+
+  const [title, setTitle] = useState("");
+
+  useEffect(() => {
+    document.title = `${user} - React Hooks Blog`;
+  }, [title, user]);
+
+  setTimeout(() => {
+    setTitle("Dummy");
+  }, 2000);
 
   return (
     <div style={{ padding: 8 }}>
