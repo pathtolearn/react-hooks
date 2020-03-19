@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { StateContext } from "../contexts";
 
-export default function Register({ dispatch }) {
+export default function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
+
+  const { dispatch } = useContext(StateContext);
 
   function handleUsername(evt) {
     setUsername(evt.target.value);
@@ -21,7 +24,7 @@ export default function Register({ dispatch }) {
     <form
       onSubmit={e => {
         e.preventDefault();
-        dispatch({type: "REGISTER", username});
+        dispatch({ type: "REGISTER", username });
       }}
     >
       <label htmlFor="register-username">Username:</label>
@@ -51,7 +54,11 @@ export default function Register({ dispatch }) {
       <input
         type="submit"
         value="Register"
-        disabled={username.length === 0 || password.length === 0 || password !== passwordRepeat}
+        disabled={
+          username.length === 0 ||
+          password.length === 0 ||
+          password !== passwordRepeat
+        }
       />
     </form>
   );
